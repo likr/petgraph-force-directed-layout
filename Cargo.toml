@@ -1,0 +1,8 @@
+[package]
+name = "fdlayout"
+version = "0.1.0"
+authors = ["Yosuke ONOUE <onoue@likr-lab.com>"]
+
+[dependencies]
+xml-rs = "0.3.4"
+petgraph = "0.2.7"
