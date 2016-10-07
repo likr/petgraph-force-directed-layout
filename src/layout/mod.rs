@@ -4,15 +4,15 @@ use petgraph::visit::GetAdjacencyMatrix;
 use super::graph::{Node, Edge};
 
 #[derive(Clone)]
-struct NodePosition {
-    x: f32,
-    y: f32,
-    vx: f32,
-    vy: f32,
+pub struct NodePosition {
+    pub x: f32,
+    pub y: f32,
+    pub vx: f32,
+    pub vy: f32,
 }
 
 fn jiggle() -> f32 {
-    0.00001
+    0.001
 }
 
 fn distance(p1: &NodePosition, p2: &NodePosition) -> f32 {
@@ -60,6 +60,9 @@ fn apply_link(graph: &Graph<Node, Edge>, alpha: f32, positions: &mut Vec<NodePos
             let y = if y == 0.0 { jiggle() } else { y };
             let l = (x * x + y * y).sqrt();
             let l = (l - distance) / l * alpha * strength;
+            if l.is_nan() {
+                println!("{} {}", x, y);
+            }
             let x = x * l;
             let y = y * l;
             {
@@ -76,7 +79,7 @@ fn apply_link(graph: &Graph<Node, Edge>, alpha: f32, positions: &mut Vec<NodePos
     }
 }
 
-pub fn layout(graph: Graph<Node, Edge>) {
+pub fn layout(graph: &Graph<Node, Edge>) -> Vec<NodePosition> {
     let n = graph.node_count();
     let mut positions = initialize_nodes(n);
     let mut alpha  = 1.0;
@@ -100,4 +103,5 @@ pub fn layout(graph: Graph<Node, Edge>) {
         let ref p = positions[i];
         println!("({}, {})", p.x, p.y);
     }
+    positions
 }
